@@ -57,6 +57,7 @@ export default function Auth() {
           value={email}
           placeholder="email@address.com"
           autoCapitalize={"none"}
+          className="border border-gray-300 p-3 rounded-md"
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -68,6 +69,7 @@ export default function Auth() {
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={"none"}
+          className="border border-gray-300 p-3 rounded-md"
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
