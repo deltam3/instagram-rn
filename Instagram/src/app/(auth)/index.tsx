@@ -75,14 +75,14 @@ export default function Auth() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title="Sign in"
-          disabled={loading}
+          // disabled={loading}
           onPress={() => signInWithEmail()}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Button
           title="Sign up"
-          disabled={loading}
+          // disabled={loading}
           onPress={() => signUpWithEmail()}
         />
       </View>

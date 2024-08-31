@@ -2,6 +2,7 @@ import { Text, View, Image, TextInput } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useState, useEffect } from "react";
 import Button from "~/src/components/Button";
+import { supabase } from "~/src/lib/supabase";
 
 export default function ProfileScreen() {
   const [image, setImage] = useState<string | null>(null);
@@ -21,7 +22,7 @@ export default function ProfileScreen() {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -56,7 +57,8 @@ export default function ProfileScreen() {
       />
       <View className="gap-2 mt-auto">
         <Button title="Update profile" />
-        <Button title="Sign out" />
+        {/* <Button title="Sign out" /> */}
+        <Button title="Sign out" onPress={() => supabase.auth.signOut()} />
       </View>
 
       {/* Avatar Image picker */}
