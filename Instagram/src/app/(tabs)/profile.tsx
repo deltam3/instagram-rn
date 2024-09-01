@@ -1,13 +1,17 @@
 import { Text, View, Image, TextInput, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "~/src/components/Button";
 import { supabase } from "~/src/lib/supabase";
 import { useAuth } from "~/src/providers/AuthProvider";
 import CustomTextInput from "~/src/components/CustomTextInput";
+import { cld, uploadImage } from "~/src/lib/cloudinary";
+import { thumbnail } from "@cloudinary/url-gen/actions/resize";
+import { AdvancedImage } from "cloudinary-react-native";
 
 export default function ProfileScreen() {
   const [image, setImage] = useState<string | null>(null);
+  const [remoteImage, setRemoteImage] = useState<string | null>(null);
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
 
@@ -24,7 +28,7 @@ export default function ProfileScreen() {
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", user?.id)
+      .eq("id", user.id)
       .single();
 
     if (error) {
@@ -33,7 +37,7 @@ export default function ProfileScreen() {
 
     setUsername(data.username);
     setBio(data.bio);
-    // setRemoteImage(data.avatar_url);
+    setRemoteImage(data.avatar_url);
   };
 
   const updateProfile = async () => {
@@ -62,31 +66,40 @@ export default function ProfileScreen() {
   };
 
   const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
 
-    // console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
   };
+
+  let remoteCldImage;
+  if (remoteImage) {
+    remoteCldImage = cld.image(remoteImage);
+    remoteCldImage.resize(thumbnail().width(300).height(300));
+  }
+
   return (
     <View className="p-3 flex-1">
-      {/* Avatar Image picker */}
+      {/* Avatar image picker */}
       {image ? (
         <Image
-          source={{
-            uri: image,
-          }}
+          source={{ uri: image }}
+          className="w-52 aspect-square self-center rounded-full bg-slate-300"
+        />
+      ) : remoteCldImage ? (
+        <AdvancedImage
+          cldImg={remoteCldImage}
           className="w-52 aspect-square self-center rounded-full bg-slate-300"
         />
       ) : (
-        <View className="w-52 aspect-square self-center rounded-full bg-slate-300" />
+        <View className="w-52 aspect-square  self-center rounded-full bg-slate-300" />
       )}
       <Text
         onPress={pickImage}
@@ -94,6 +107,7 @@ export default function ProfileScreen() {
       >
         Change
       </Text>
+
       {/* Form */}
       <View className="gap-5">
         <CustomTextInput
@@ -112,13 +126,12 @@ export default function ProfileScreen() {
           numberOfLines={3}
         />
       </View>
+
+      {/* Button */}
       <View className="gap-2 mt-auto">
-        {/* <Button title="Update profile" /> */}
         <Button title="Update profile" onPress={updateProfile} />
         <Button title="Sign out" onPress={() => supabase.auth.signOut()} />
       </View>
-
-      {/* Avatar Image picker */}
     </View>
   );
 }
