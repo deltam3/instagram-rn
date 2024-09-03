@@ -51,8 +51,6 @@ export default function Auth() {
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TextInput
-          // label="Email"
-          // leftIcon={{ type: "font-awesome", name: "envelope" }}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -62,8 +60,6 @@ export default function Auth() {
       </View>
       <View style={styles.verticallySpaced}>
         <TextInput
-          // label="Password"
-          // leftIcon={{ type: "font-awesome", name: "lock" }}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
@@ -75,14 +71,14 @@ export default function Auth() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title="Sign in"
-          // disabled={loading}
+          disabled={loading}
           onPress={() => signInWithEmail()}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Button
           title="Sign up"
-          // disabled={loading}
+          disabled={loading}
           onPress={() => signUpWithEmail()}
         />
       </View>

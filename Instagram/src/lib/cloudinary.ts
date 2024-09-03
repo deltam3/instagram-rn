@@ -4,6 +4,7 @@ import {
   UploadApiOptions,
   UploadApiResponse,
 } from "cloudinary-react-native/lib/typescript/src/api/upload/model/params/upload-params";
+
 export const cld = new Cloudinary({
   cloud: {
     cloudName: process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME,
